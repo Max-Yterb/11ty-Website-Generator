@@ -5,6 +5,7 @@ const step3 = require('../step3-static-pages');
 const step4 = require('../step4-multilanguage');
 const step5 = require('../step5-cms');
 const step6 = require('../step6-dynamic');
+const step7 = require('../step7-netlify-deployment');
 
 jest.mock('../step1-user-input', () => ({ getUserInput: jest.fn() }));
 jest.mock('../step2-base-project', () => ({ createBaseProject: jest.fn() }));
@@ -12,6 +13,7 @@ jest.mock('../step3-static-pages', () => ({ addStaticPages: jest.fn() }));
 jest.mock('../step4-multilanguage', () => ({ addMultilanguageSupport: jest.fn() }));
 jest.mock('../step5-cms', () => ({ addCmsIntegration: jest.fn() }));
 jest.mock('../step6-dynamic', () => ({ addDynamicResources: jest.fn() }));
+jest.mock('../step7-netlify-deployment', () => ({ addNetlifyDeployment: jest.fn() }));
 
 describe('Main Script', () => {
   const mockConfig = {
@@ -28,6 +30,7 @@ describe('Main Script', () => {
     step4.addMultilanguageSupport.mockResolvedValue();
     step5.addCmsIntegration.mockResolvedValue();
     step6.addDynamicResources.mockResolvedValue();
+    step7.addNetlifyDeployment.mockResolvedValue();
   });
 
   test('should execute all steps in correct order', async () => {
@@ -39,6 +42,7 @@ describe('Main Script', () => {
     expect(step4.addMultilanguageSupport).toHaveBeenCalledWith(mockConfig);
     expect(step5.addCmsIntegration).toHaveBeenCalledWith(mockConfig);
     expect(step6.addDynamicResources).toHaveBeenCalledWith(mockConfig);
+    expect(step7.addNetlifyDeployment).toHaveBeenCalledWith(mockConfig);
   });
 
   test('should skip multilanguage step for non-multilanguage projects', async () => {
@@ -72,7 +76,7 @@ describe('Main Script', () => {
     await main();
 
     expect(consoleError).toHaveBeenCalledWith(
-      expect.stringContaining('Error generating website'),
+      expect.stringContaining('❌ An error occurred during project generation:'),
       mockError
     );
     expect(processExit).toHaveBeenCalledWith(1);
@@ -87,10 +91,7 @@ describe('Main Script', () => {
     await main();
 
     expect(consoleLog).toHaveBeenCalledWith(
-      expect.stringContaining('Website generated successfully')
-    );
-    expect(consoleLog).toHaveBeenCalledWith(
-      expect.stringContaining('Next steps:')
+      expect.stringContaining('✅ All steps completed successfully!')
     );
 
     consoleLog.mockRestore();
