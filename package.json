@@ -1,0 +1,33 @@
+{
+  "name": "11ty-website-generator",
+  "version": "1.0.0",
+  "description": "A website generator for 11ty projects with various features",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "11ty",
+    "static-site",
+    "generator",
+    "cms",
+    "multilanguage"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "fs-extra": "^11.1.1",
+    "inquirer": "^8.2.5",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mock-fs": "^5.2.0"
+  },
+  "bin": {
+    "11ty-generator": "./generator.js"
+  }
+}
