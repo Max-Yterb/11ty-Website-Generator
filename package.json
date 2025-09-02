@@ -28,6 +28,6 @@
     "mock-fs": "^5.2.0"
   },
   "bin": {
-    "11ty-generator": "./generator.js"
+    "create-leadventor-site": "main.js"
   }
 }
