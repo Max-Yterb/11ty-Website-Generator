@@ -1,6 +1,6 @@
 {
   "name": "11ty-website-generator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A website generator for 11ty projects with various features",
   "main": "main.js",
   "scripts": {

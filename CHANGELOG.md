@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.3](https://github.com/Max-Yterb/Generator/compare/v1.0.1...v1.0.3) (2025-09-03)
+
+
+### Bug Fixes
+
+* add navigation and year shortcode to multilanguage projects ([89a49bd](https://github.com/Max-Yterb/Generator/commit/89a49bd84dbb5ebc0b3e9c86559796e6c04b0205))
+
 ### [1.0.1](https://github.com/Max-Yterb/Generator/compare/v1.0.0...v1.0.1) (2025-09-02)
 
 ### Features
