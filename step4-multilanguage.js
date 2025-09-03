@@ -58,7 +58,8 @@ async function addMultilanguageSupport(config) {
         services: "Services",
         contact: "Contact Us",
         welcome: "Welcome to",
-        description: "This is a multilanguage website created with 11ty Website Generator."
+        description: "This is a multilanguage website created with 11ty Website Generator.",
+        rights_reserved: "All rights reserved."
       },
       es: {
         home: "Inicio",
@@ -66,7 +67,8 @@ async function addMultilanguageSupport(config) {
         services: "Servicios",
         contact: "Contacto",
         welcome: "Bienvenido a",
-        description: "Este es un sitio web multilingüe creado con 11ty Website Generator."
+        description: "Este es un sitio web multilingüe creado con 11ty Website Generator.",
+        rights_reserved: "Todos los derechos reservados."
       },
       it: {
         home: "Home",
@@ -74,7 +76,8 @@ async function addMultilanguageSupport(config) {
         services: "Servizi",
         contact: "Contatti",
         welcome: "Benvenuto in",
-        description: "Questo è un sito web multilingue creato con 11ty Website Generator."
+        description: "Questo è un sito web multilingue creato con 11ty Website Generator.",
+        rights_reserved: "Tutti i diritti riservati."
       }
     };
 
@@ -196,11 +199,15 @@ module.exports = function(eleventyConfig) {
               {% endfor %}
             </ul>
           </div>
-        </div>`;
-      headerContent = headerContent.replace(
-        '</nav>',
-        `${languageSwitcher}</nav>`
-      );
+        </div>
+`;
+
+    const newHeaderContent = headerContent.replace(
+      '</nav>',
+      `        ${languageSwitcher.trim()}\n      </nav>`
+    );
+
+    await fs.writeFile(headerPath, newHeaderContent);
 
     // Create index page for English
     await fs.writeFile(
