@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/Max-Yterb/Generator/compare/v1.0.0...v1.0.1) (2025-09-02)
+
+### Features
+
+* replace nunjucks-date-filter with year shortcode ([67047d5](https://github.com/Max-Yterb/Generator/commit/67047d5a075951685981901d24e43d4535733149))
+
 ## [1.0.0](https://github.com/Max-Yterb/Generator/compare/v0.9.10...v1.0.0) (2025-09-02)
 
 
