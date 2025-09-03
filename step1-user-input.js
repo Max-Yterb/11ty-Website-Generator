@@ -66,7 +66,7 @@ async function getUserInput() {
           type: 'checkbox',
           name: 'languages',
           message: 'Select languages to include (English is default):',
-          choices: ['Spanish', 'French', 'Italian', 'German', 'Portuguese'],
+          choices: ['Spanish', 'Italian'],
           default: ['Spanish']
         }
       ]);

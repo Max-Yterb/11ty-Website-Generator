@@ -17,7 +17,9 @@ async function addMultilanguageSupport(config) {
     if (!config) {
       const configPath = path.join(process.cwd(), 'project-config.json');
       if (!fs.existsSync(configPath)) {
-        throw new Error('Project configuration not found. Please run step 1 first.');
+        throw new Error(
+          'Project configuration not found. Please run step 1 first.'
+        );
       }
       config = await fs.readJSON(configPath);
     }
@@ -28,7 +30,9 @@ async function addMultilanguageSupport(config) {
       !config.languages ||
       config.languages.length === 0
     ) {
-      console.log(chalk.yellow('This is not a multilanguage project. Skipping this step.'));
+      console.log(
+        chalk.yellow('This is not a multilanguage project. Skipping this step.')
+      );
       return;
     }
 
@@ -43,42 +47,45 @@ async function addMultilanguageSupport(config) {
     const languageMap = {
       English: 'en',
       Spanish: 'es',
-      Italian: 'it'
+      Italian: 'it',
     };
 
     // Only include non-English languages from config.languages
     const languageCodes = config.languages
-      .map(lang => languageMap[lang])
+      .map((lang) => languageMap[lang])
       .filter(Boolean);
 
     const translations = {
       en: {
-        home: "Home",
-        about: "About Us",
-        services: "Services",
-        contact: "Contact Us",
-        welcome: "Welcome to",
-        description: "This is a multilanguage website created with 11ty Website Generator.",
-        rights_reserved: "All rights reserved."
+        home: 'Home',
+        about: 'About Us',
+        services: 'Services',
+        contact: 'Contact Us',
+        welcome: 'Welcome to',
+        description:
+          'This is a multilanguage website created with 11ty Website Generator.',
+        rights_reserved: 'All rights reserved.',
       },
       es: {
-        home: "Inicio",
-        about: "Sobre Nosotros",
-        services: "Servicios",
-        contact: "Contacto",
-        welcome: "Bienvenido a",
-        description: "Este es un sitio web multilingüe creado con 11ty Website Generator.",
-        rights_reserved: "Todos los derechos reservados."
+        home: 'Inicio',
+        about: 'Sobre Nosotros',
+        services: 'Servicios',
+        contact: 'Contacto',
+        welcome: 'Bienvenido a',
+        description:
+          'Este es un sitio web multilingüe creado con 11ty Website Generator.',
+        rights_reserved: 'Todos los derechos reservados.',
       },
       it: {
-        home: "Home",
-        about: "Chi Siamo",
-        services: "Servizi",
-        contact: "Contatti",
-        welcome: "Benvenuto in",
-        description: "Questo è un sito web multilingue creato con 11ty Website Generator.",
-        rights_reserved: "Tutti i diritti riservati."
-      }
+        home: 'Home',
+        about: 'Chi Siamo',
+        services: 'Servizi',
+        contact: 'Contatti',
+        welcome: 'Benvenuto in',
+        description:
+          'Questo è un sito web multilingue creato con 11ty Website Generator.',
+        rights_reserved: 'Tutti i diritti riservati.',
+      },
     };
 
     // Create language data file
@@ -87,7 +94,7 @@ async function addMultilanguageSupport(config) {
   defaultLocale: "en",
   locales: {
     "en": "en",
-    ${languageCodes.map(lang => `"${lang}": "${lang}"`).join(',\n    ')}
+    ${languageCodes.map((lang) => `"${lang}": "${lang}"`).join(',\n    ')}
   },
   translations: ${JSON.stringify(translations, null, 2)}
 };`;
@@ -99,21 +106,23 @@ async function addMultilanguageSupport(config) {
     // Create languages data file
     console.log('Creating languages data file...');
     const languageFullNames = {
-        en: 'English',
-        es: 'Español',
-        it: 'Italiano'
+      en: 'English',
+      es: 'Español',
+      it: 'Italiano',
     };
 
-    const languageData = config.languages.map(lang => {
+    const languageData = config.languages
+      .map((lang) => {
         const code = languageMap[lang];
         return { code, name: languageFullNames[code] };
-    }).filter(Boolean);
+      })
+      .filter(Boolean);
 
     // ensure 'en' is first
     languageData.sort((a, b) => {
-        if (a.code === 'en') return -1;
-        if (b.code === 'en') return 1;
-        return 0;
+      if (a.code === 'en') return -1;
+      if (b.code === 'en') return 1;
+      return 0;
     });
 
     await fs.writeFile(
@@ -130,17 +139,26 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addShortcode("year", () => \`\${new Date().getFullYear()}\`);
   // Passthrough copy for assets
   eleventyConfig.addPassthroughCopy("src/assets");
-  
+
   // Add language code to permalink
   eleventyConfig.addFilter("localizedUrl", function(url, locale) {
     const i18n = require('./src/_data/i18n.js');
-    if (locale === i18n.defaultLocale) {
-      return url;
+    const locales = Object.keys(i18n.locales);
+    let baseUrl = url;
+
+    const firstSegment = baseUrl.split('/')[1];
+    if (locales.includes(firstSegment)) {
+      baseUrl = '/' + baseUrl.split('/').slice(2).join('/');
     }
-    return \`/\${locale}\${url}\`;
+
+    if (locale === i18n.defaultLocale) {
+      return baseUrl;
+    }
+
+    return '/' + locale + (baseUrl.startsWith('/') ? baseUrl.substring(1) : baseUrl);
   });
-  
-  // Get translation
+
+  // Get tr  anslation
   eleventyConfig.addFilter("t", function(key, locale) {
     const i18n = require('./src/_data/i18n.js');
     const lang = locale || i18n.defaultLocale;
@@ -203,8 +221,8 @@ module.exports = function(eleventyConfig) {
 `;
 
     const newHeaderContent = headerContent.replace(
-      '</nav>',
-      `        ${languageSwitcher.trim()}\n      </nav>`
+      '</ul>',
+      `</ul>\n        ${languageSwitcher.trim()}`
     );
 
     await fs.writeFile(headerPath, newHeaderContent);

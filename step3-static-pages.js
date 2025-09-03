@@ -39,7 +39,7 @@ async function addStaticPages(config) {
   <div class="container mx-auto px-4 py-4">
     <div class="flex justify-between items-center">
       <a href="/" class="text-xl font-bold">{{ site.name }}</a>
-      <nav>
+      <nav class="flex items-center space-x-8">
         <ul class="flex space-x-4">
           <li><a href="{{ '/' | localizedUrl(locale) }}" class="hover:text-gray-300">{{ 'home' | t(locale) }}</a></li>
           <li><a href="{{ '/about/' | localizedUrl(locale) }}" class="hover:text-gray-300">{{ 'about' | t(locale) }}</a></li>
