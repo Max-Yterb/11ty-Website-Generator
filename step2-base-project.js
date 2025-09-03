@@ -17,7 +17,9 @@ async function createBaseProject(config) {
     if (!config) {
       const configPath = path.join(process.cwd(), 'project-config.json');
       if (!fs.existsSync(configPath)) {
-        throw new Error('Project configuration not found. Please run step 1 first.');
+        throw new Error(
+          'Project configuration not found. Please run step 1 first.'
+        );
       }
       config = await fs.readJSON(configPath);
     }
@@ -27,7 +29,7 @@ async function createBaseProject(config) {
 
     // Create project directory
     await fs.ensureDir(projectDir);
-    
+
     // Create basic structure
     await fs.ensureDir(path.join(projectDir, 'src'));
     await fs.ensureDir(path.join(projectDir, 'src', '_includes'));
@@ -37,7 +39,7 @@ async function createBaseProject(config) {
     await fs.ensureDir(path.join(projectDir, 'src', 'assets'));
     await fs.ensureDir(path.join(projectDir, 'src', 'assets', 'css'));
     await fs.ensureDir(path.join(projectDir, 'src', 'assets', 'js'));
-    
+
     console.log('Creating package.json...');
 
     // Create package.json
@@ -47,25 +49,31 @@ async function createBaseProject(config) {
       description: 'Website created with 11ty Website Generator',
       scripts: {
         start: 'eleventy --serve',
-        build: 'eleventy'
+        build: 'eleventy',
       },
       dependencies: {
-        '@11ty/eleventy': '^2.0.1',
-        'alpinejs': '^3.13.0',
-        'tailwindcss': '^3.3.3'
-      }
+        '@11ty/eleventy': '2.0.1',
+        'alpinejs': '3.13.3',
+        'tailwindcss': '3.3.5',
+        '@11ty/eleventy-navigation': '0.3.5'
+      },
     };
-    
-    await fs.writeJSON(path.join(projectDir, 'package.json'), packageJson, { spaces: 2 });
-    
+
+    await fs.writeJSON(path.join(projectDir, 'package.json'), packageJson, {
+      spaces: 2,
+    });
+
     console.log('Creating configuration files...');
-    
+
     // Create .eleventy.js
     await fs.writeFile(
       path.join(projectDir, '.eleventy.js'),
-      `module.exports = function(eleventyConfig) {
+      `const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
+module.exports = function(eleventyConfig) {
+  eleventyConfig.addPlugin(eleventyNavigationPlugin);
+  eleventyConfig.addShortcode("year", () => \`\${new Date().getFullYear()}\`);
   eleventyConfig.addPassthroughCopy("src/assets");
-  
+
   return {
     dir: {
       input: "src",
@@ -88,9 +96,9 @@ async function createBaseProject(config) {
         plugins: [],
       }`
     );
-    
+
     console.log('Creating base layout...');
-    
+
     // Create base layout
     await fs.writeFile(
       path.join(projectDir, 'src', '_includes', 'layouts', 'base.njk'),
@@ -105,16 +113,16 @@ async function createBaseProject(config) {
 </head>
 <body>
   {% include "partials/header.njk" %}
-  
+
   <main>
     {{ content | safe }}
   </main>
-  
+
   {% include "partials/footer.njk" %}
 </body>
 </html>`
     );
-    
+
     // Create site data file
     await fs.writeFile(
       path.join(projectDir, 'src', '_data', 'site.js'),
@@ -125,7 +133,10 @@ async function createBaseProject(config) {
     );
 
     // Create multilanguage structure if specified
-    if (config.projectType.includes('multilanguage') && config.languages.length > 0) {
+    if (
+      config.projectType.includes('multilanguage') &&
+      config.languages.length > 0
+    ) {
       console.log('Creating multilanguage structure...');
       for (const lang of config.languages) {
         await fs.ensureDir(path.join(projectDir, 'src', lang));
@@ -158,10 +169,10 @@ collections:
 `
       );
     }
-    
+
     console.log(chalk.green('\n✅ Base 11ty project created successfully!'));
     console.log(chalk.yellow('\nRun the next step to add static pages.'));
-    
+
     return projectDir;
   } catch (error) {
     console.error(chalk.red('Error creating base project:'), error);
