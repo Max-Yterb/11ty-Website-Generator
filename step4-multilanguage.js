@@ -79,7 +79,10 @@ async function addMultilanguageSupport(config) {
     // Update .eleventy.js for multilanguage support
     await fs.writeFile(
       path.join(projectDir, '.eleventy.js'),
-      `module.exports = function(eleventyConfig) {
+      `const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
+module.exports = function(eleventyConfig) {
+  eleventyConfig.addPlugin(eleventyNavigationPlugin);
+  eleventyConfig.addShortcode("year", () => \`\${new Date().getFullYear()}\`);
   // Passthrough copy for assets
   eleventyConfig.addPassthroughCopy("src/assets");
   
