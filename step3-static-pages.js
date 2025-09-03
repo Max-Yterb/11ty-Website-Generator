@@ -58,7 +58,7 @@ async function addStaticPages(config) {
       `<footer class="bg-gray-800 text-white py-6 mt-8">
   <div class="container mx-auto px-4">
     <div class="mt-6 pt-4 border-t border-gray-700 text-sm">
-      <p>&copy; { year } {{ site.name }}. All rights reserved.</p>
+      <p>&copy; {% year %} {{ site.name }}. All rights reserved.</p>
     </div>
   </div>
 </footer>`

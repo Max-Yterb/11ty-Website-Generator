@@ -1,0 +1,10 @@
+- Remember the Product Requirements Document (PRD.md)
+- When you change the code, always run the test after.
+- When you commit code, always add a comment using standard commit message format.
+  - Example: `feat: add new feature`
+  - Example: `fix: fix bug`
+  - Example: `docs: update documentation`
+  - Example: `style: format code`
+  - Example: `refactor: refactor code`
+  - Example: `test: add tests`
+  - Example: `chore: update dependencies`

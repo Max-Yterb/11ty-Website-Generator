@@ -21,7 +21,7 @@ const PROJECT_TYPES = [
  * Collects and validates user input for project configuration
  * @returns {Promise<Object>} Project configuration
  */
-async function collectUserInput() {
+async function getUserInput() {
   try {
     // Basic project information
     const answers = await inquirer.prompt([
@@ -89,7 +89,7 @@ async function collectUserInput() {
 
 // Execute if run directly
 if (require.main === module) {
-  collectUserInput();
+  getUserInput();
 }
 
-module.exports = { collectUserInput };
+module.exports = { getUserInput };

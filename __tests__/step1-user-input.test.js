@@ -1,4 +1,4 @@
-const { collectUserInput: getUserInput } = require('../step1-user-input');
+const { getUserInput } = require('../step1-user-input');
 const inquirer = require('inquirer');
 const fs = require('fs-extra');
 
