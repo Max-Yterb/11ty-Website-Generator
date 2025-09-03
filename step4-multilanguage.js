@@ -46,7 +46,10 @@ async function addMultilanguageSupport(config) {
       Italian: 'it'
     };
 
-    const languageCodes = ['en', ...config.languages.map(lang => languageMap[lang]).filter(Boolean)];
+    // Only include non-English languages from config.languages
+    const languageCodes = config.languages
+      .map(lang => languageMap[lang])
+      .filter(Boolean);
 
     const translations = {
       en: {
@@ -80,6 +83,7 @@ async function addMultilanguageSupport(config) {
     const i18nContent = `module.exports = {
   defaultLocale: "en",
   locales: {
+    "en": "en",
     ${languageCodes.map(lang => `"${lang}": "${lang}"`).join(',\n    ')}
   },
   translations: ${JSON.stringify(translations, null, 2)}
@@ -87,6 +91,31 @@ async function addMultilanguageSupport(config) {
     await fs.writeFile(
       path.join(projectDir, 'src', '_data', 'i18n.js'),
       i18nContent
+    );
+
+    // Create languages data file
+    console.log('Creating languages data file...');
+    const languageFullNames = {
+        en: 'English',
+        es: 'Español',
+        it: 'Italiano'
+    };
+
+    const languageData = config.languages.map(lang => {
+        const code = languageMap[lang];
+        return { code, name: languageFullNames[code] };
+    }).filter(Boolean);
+
+    // ensure 'en' is first
+    languageData.sort((a, b) => {
+        if (a.code === 'en') return -1;
+        if (b.code === 'en') return 1;
+        return 0;
+    });
+
+    await fs.writeFile(
+      path.join(projectDir, 'src', '_data', 'languages.js'),
+      `module.exports = ${JSON.stringify(languageData, null, 2)};`
     );
 
     // Update .eleventy.js for multilanguage support
@@ -115,6 +144,10 @@ module.exports = function(eleventyConfig) {
     return i18n.translations[lang][key] || key;
   });
 
+  eleventyConfig.addFilter("find", function(array, key, value) {
+    return array.find(item => item[key] === value);
+  });
+
   return {
     dir: {
       input: "src",
@@ -126,7 +159,50 @@ module.exports = function(eleventyConfig) {
 };`
     );
 
-    // Create language directories and pages for English
+    // Copy flags from assets
+    console.log('Copying flag images...');
+    const flagsSrc = path.join(__dirname, 'assets', 'flags');
+    const flagsDest = path.join(projectDir, 'src', 'assets', 'flags');
+    await fs.copy(flagsSrc, flagsDest);
+
+    // Add language switcher to header
+    const headerPath = path.join(
+      projectDir,
+      'src',
+      '_includes',
+      'partials',
+      'header.njk'
+    );
+    let headerContent = await fs.readFile(headerPath, 'utf-8');
+
+    const languageSwitcher = `
+<div x-data="{ open: false }" class="relative">
+          <button @click="open = !open" class="flex items-center space-x-2">
+            {% set currentLanguage = languages | find('code', locale) %}
+            <img src="{{ ('/assets/flags/' + currentLanguage.code + '.svg') | url }}" alt="{{ currentLanguage.name }}" class="w-6 h-6">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
+            <ul class="py-1">
+              {% for lang in languages %}
+                {% if lang.code != locale %}
+                  <li>
+                    <a href="{{ page.url | localizedUrl(lang.code) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <img src="{{ ('/assets/flags/' + lang.code + '.svg') | url }}" alt="{{ lang.name }}" class="w-6 h-6 mr-2">
+                      {{ lang.name }}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>`;
+      headerContent = headerContent.replace(
+        '</nav>',
+        `${languageSwitcher}</nav>`
+      );
+
+    // Create index page for English
     await fs.writeFile(
       path.join(projectDir, 'src', 'index.njk'),
       `---
@@ -140,48 +216,9 @@ locale: en
   <p class="text-lg mb-8">{{ 'description' | t(locale) }}</p>
 </div>`
     );
-    
-    console.log('Creating language directories...');
-
-    // Add language switcher to header
-    const headerPath = path.join(
-      projectDir,
-      'src',
-      '_includes',
-      'partials',
-      'header.njk'
-    );
-    let headerContent = await fs.readFile(headerPath, 'utf-8');
-
-    // Check if the language switcher already exists
-    if (!headerContent.includes('id="language-switcher"')) {
-      const languageSwitcher = `
-          <div id="language-switcher">
-            <ul>
-              ${languageCodes
-                .map(
-                  (lang) => `
-                <li>
-                  <a href="/${lang}/">
-                    <img src="/assets/images/flags/${lang}.svg" alt="${lang}" />
-                  </a>
-                </li>
-              `
-                )
-                .join('')}
-            </ul>
-          </div>
-        `;
-      headerContent = headerContent.replace(
-        '</nav>',
-        `${languageSwitcher}</nav>`
-      );
-      await fs.writeFile(headerPath, headerContent);
-    }
 
     // Create language-specific directories and pages
     for (const lang of languageCodes) {
-      if (lang === 'en') continue;
       const langDir = path.join(projectDir, 'src', lang);
       await fs.ensureDir(langDir);
 

@@ -41,10 +41,10 @@ async function addStaticPages(config) {
       <a href="/" class="text-xl font-bold">{{ site.name }}</a>
       <nav>
         <ul class="flex space-x-4">
-          <li><a href="/" class="hover:text-gray-300">Home</a></li>
-          <li><a href="/about/" class="hover:text-gray-300">About</a></li>
-          <li><a href="/services/" class="hover:text-gray-300">Services</a></li>
-          <li><a href="/contact/" class="hover:text-gray-300">Contact</a></li>
+          <li><a href="{{ '/' | localizedUrl(locale) }}" class="hover:text-gray-300">{{ 'home' | t(locale) }}</a></li>
+          <li><a href="{{ '/about/' | localizedUrl(locale) }}" class="hover:text-gray-300">{{ 'about' | t(locale) }}</a></li>
+          <li><a href="{{ '/services/' | localizedUrl(locale) }}" class="hover:text-gray-300">{{ 'services' | t(locale) }}</a></li>
+          <li><a href="{{ '/contact/' | localizedUrl(locale) }}" class="hover:text-gray-300">{{ 'contact' | t(locale) }}</a></li>
         </ul>
       </nav>
     </div>
@@ -58,7 +58,7 @@ async function addStaticPages(config) {
       `<footer class="bg-gray-800 text-white py-6 mt-8">
   <div class="container mx-auto px-4">
     <div class="mt-6 pt-4 border-t border-gray-700 text-sm">
-      <p>&copy; {% year %} {{ site.name }}. All rights reserved.</p>
+      <p>&copy; {% year %} {{ site.name }}. {{ 'rights_reserved' | t(locale) }}</p>
     </div>
   </div>
 </footer>`
