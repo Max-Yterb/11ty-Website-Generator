@@ -23,59 +23,72 @@ async function addMultilanguageSupport(config) {
     }
 
     // Skip if not a multilanguage project
-    if (!config.projectType.includes('multilanguage')) {
+    if (
+      !config.projectType.includes('multilanguage') ||
+      !config.languages ||
+      config.languages.length === 0
+    ) {
       console.log(chalk.yellow('This is not a multilanguage project. Skipping this step.'));
       return;
     }
 
     const projectDir = path.join(process.cwd(), config.projectName);
-    
+
     if (!fs.existsSync(projectDir)) {
       throw new Error('Project directory not found. Please run step 2 first.');
     }
-    
+
     console.log('Setting up multilanguage structure...');
-    
-    // Create language directories
-    const languages = config.languages || ['English', 'Spanish'];
-    const langCodes = {
-      'English': 'en',
-      'Spanish': 'es',
-      'French': 'fr',
-      'German': 'de',
-      'Italian': 'it',
-      'Portuguese': 'pt'
+
+    const languageMap = {
+      English: 'en',
+      Spanish: 'es',
+      Italian: 'it'
     };
-    
+
+    const languageCodes = ['en', ...config.languages.map(lang => languageMap[lang]).filter(Boolean)];
+
+    const translations = {
+      en: {
+        home: "Home",
+        about: "About Us",
+        services: "Services",
+        contact: "Contact Us",
+        welcome: "Welcome to",
+        description: "This is a multilanguage website created with 11ty Website Generator."
+      },
+      es: {
+        home: "Inicio",
+        about: "Sobre Nosotros",
+        services: "Servicios",
+        contact: "Contacto",
+        welcome: "Bienvenido a",
+        description: "Este es un sitio web multilingüe creado con 11ty Website Generator."
+      },
+      it: {
+        home: "Home",
+        about: "Chi Siamo",
+        services: "Servizi",
+        contact: "Contatti",
+        welcome: "Benvenuto in",
+        description: "Questo è un sito web multilingue creato con 11ty Website Generator."
+      }
+    };
+
     // Create language data file
-    await fs.writeFile(
-      path.join(projectDir, 'src', '_data', 'i18n.js'),
-      `module.exports = {
+    console.log('Creating i18n data file...');
+    const i18nContent = `module.exports = {
   defaultLocale: "en",
   locales: {
-    ${languages.map(lang => `"${langCodes[lang]}": "${lang}"`).join(',\n    ')}
+    ${languageCodes.map(lang => `"${lang}": "${lang}"`).join(',\n    ')}
   },
-  translations: {
-    en: {
-      home: "Home",
-      about: "About Us",
-      services: "Services",
-      contact: "Contact Us",
-      welcome: "Welcome to",
-      description: "This is a multilanguage website created with 11ty Website Generator."
-    },
-    es: {
-      home: "Inicio",
-      about: "Sobre Nosotros",
-      services: "Servicios",
-      contact: "Contacto",
-      welcome: "Bienvenido a",
-      description: "Este es un sitio web multilingüe creado con 11ty Website Generator."
-    }
-  }
-};`
+  translations: ${JSON.stringify(translations, null, 2)}
+};`;
+    await fs.writeFile(
+      path.join(projectDir, 'src', '_data', 'i18n.js'),
+      i18nContent
     );
-    
+
     // Update .eleventy.js for multilanguage support
     await fs.writeFile(
       path.join(projectDir, '.eleventy.js'),
@@ -112,7 +125,7 @@ module.exports = function(eleventyConfig) {
   };
 };`
     );
-    
+
     // Create language directories and pages for English
     await fs.writeFile(
       path.join(projectDir, 'src', 'index.njk'),
@@ -128,34 +141,73 @@ locale: en
 </div>`
     );
     
-    // Create Spanish version
-    await fs.ensureDir(path.join(projectDir, 'src', 'es'));
-    await fs.writeFile(
-      path.join(projectDir, 'src', 'es', 'index.njk'),
-      `---
+    console.log('Creating language directories...');
+
+    // Add language switcher to header
+    const headerPath = path.join(
+      projectDir,
+      'src',
+      '_includes',
+      'partials',
+      'header.njk'
+    );
+    let headerContent = await fs.readFile(headerPath, 'utf-8');
+
+    // Check if the language switcher already exists
+    if (!headerContent.includes('id="language-switcher"')) {
+      const languageSwitcher = `
+          <div id="language-switcher">
+            <ul>
+              ${languageCodes
+                .map(
+                  (lang) => `
+                <li>
+                  <a href="/${lang}/">
+                    <img src="/assets/images/flags/${lang}.svg" alt="${lang}" />
+                  </a>
+                </li>
+              `
+                )
+                .join('')}
+            </ul>
+          </div>
+        `;
+      headerContent = headerContent.replace(
+        '</nav>',
+        `${languageSwitcher}</nav>`
+      );
+      await fs.writeFile(headerPath, headerContent);
+    }
+
+    // Create language-specific directories and pages
+    for (const lang of languageCodes) {
+      if (lang === 'en') continue;
+      const langDir = path.join(projectDir, 'src', lang);
+      await fs.ensureDir(langDir);
+
+      // Create index page for each language
+      const title = translations[lang]?.home || 'Home';
+
+      await fs.writeFile(
+        path.join(langDir, 'index.njk'),
+        `---
 layout: layouts/base.njk
-title: Inicio
-locale: es
+title: ${title}
+locale: ${lang}
 ---
 
 <div class="container mx-auto px-4 py-12">
   <h1 class="text-4xl font-bold mb-6">{{ 'welcome' | t(locale) }} {{ site.name }}</h1>
   <p class="text-lg mb-8">{{ 'description' | t(locale) }}</p>
 </div>`
-    );
-    
-    console.log(chalk.green('\n✅ Multilanguage support added successfully!'));
-    console.log(chalk.yellow('\nRun the next step to add CMS integration (if applicable).'));
-    
+      );
+    }
+
+    console.log(chalk.green('Multilanguage support added successfully!'));
   } catch (error) {
     console.error('Error adding multilanguage support:', error);
     throw error;
   }
-}
-
-// Execute if run directly
-if (require.main === module) {
-  addMultilanguageSupport();
 }
 
 module.exports = { addMultilanguageSupport };
