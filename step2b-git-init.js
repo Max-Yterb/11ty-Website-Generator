@@ -25,6 +25,7 @@ async function initializeGitRepository(config) {
       config = await fs.readJSON(configPath);
     }
 
+    // Use parent directory to match step2 behavior
     const projectDir = path.join(process.cwd(), config.projectName);
     
     // Check if project directory exists
@@ -35,6 +36,9 @@ async function initializeGitRepository(config) {
     }
 
     console.log('Initializing Git repository...');
+    
+    // Store original directory to return to it later
+    const originalDir = process.cwd();
     
     // Change to project directory and initialize Git
     process.chdir(projectDir);
@@ -60,7 +64,7 @@ async function initializeGitRepository(config) {
     execSync('git commit -m "Initial commit"', { stdio: 'inherit' });
     
     // Change back to original directory
-    process.chdir('..');
+    process.chdir(originalDir);
     
     console.log(chalk.green('\n✅ Git repository initialized successfully!'));
     console.log(chalk.cyan('Repository created with main branch and initial commit.'));

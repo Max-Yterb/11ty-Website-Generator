@@ -38,7 +38,7 @@ describe('Git Repository Initialization', () => {
     expect(execSync).toHaveBeenCalledWith('git init -b main', { stdio: 'inherit' });
     expect(execSync).toHaveBeenCalledWith('git add .', { stdio: 'inherit' });
     expect(execSync).toHaveBeenCalledWith('git commit -m "Initial commit"', { stdio: 'inherit' });
-    expect(mockChdir).toHaveBeenCalledWith('..');
+    expect(mockChdir).toHaveBeenCalledWith(process.cwd());
   });
 
   test('should fallback to older Git version commands if needed', async () => {
