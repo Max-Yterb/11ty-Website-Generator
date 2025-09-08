@@ -72,13 +72,27 @@ backend:
 backend:
   name: git-gateway
   branch: main
+publish_mode: editorial_workflow  # Enable draft/review workflow
 \`\`\`
+
+### Publish Modes
+
+**Simple Mode (Local Development):**
+- Content is published immediately
+- No draft or review workflow
+- Works with proxy backend
+
+**Editorial Workflow (Production):**
+- Draft → Review → Publish workflow
+- Requires Git Gateway backend
+- Creates pull requests for content changes
 
 ### Troubleshooting
 
 - **API Error 404**: Make sure the CMS proxy server is running (\`npm run cms:proxy\`)
 - **Cannot access /admin**: Ensure the development server is running (\`npm start\`)
 - **Authentication issues**: Check Netlify Identity settings for production
+- **API_ERROR: Unknown action unpublishedEntries**: Switch to \`publish_mode: simple\` for local development
 `;
 
   // Replace the existing CMS section or add it after the main description
@@ -120,7 +134,8 @@ async function addCmsIntegration(config) {
       return;
     }
 
-    const projectDir = path.join(process.cwd(), config.projectName);
+    // Use parent directory to match step2 behavior
+  const projectDir = path.join(process.cwd(), config.projectName);
 
     if (!fs.existsSync(projectDir)) {
       throw new Error('Project directory not found. Please run step 2 first.');
@@ -162,8 +177,12 @@ backend:
 #   name: git-gateway
 #   branch: main # Branch to update (optional; defaults to master)
 
-# Publish mode for editorial workflow
-publish_mode: editorial_workflow
+# Publish mode - use simple for local development, editorial_workflow for production
+# For local development with proxy backend:
+publish_mode: simple
+
+# For production with Git Gateway, use:
+# publish_mode: editorial_workflow
 
 # Media folder where uploads will go
 media_folder: "src/assets/images/uploads"
