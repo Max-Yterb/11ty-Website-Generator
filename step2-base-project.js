@@ -142,6 +142,7 @@ async function createBaseProject(config) {
       config = await fs.readJSON(configPath);
     }
 
+    // Create project in current working directory
     const projectDir = path.join(process.cwd(), config.projectName);
     console.log('Creating project directories...');
 

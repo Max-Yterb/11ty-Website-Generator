@@ -1,0 +1,91 @@
+<h1>Product Requirements Document (PRD): Website Generator Script</h1>
+<h2>Overview</h2>
+<p>This script generates website projects using Eleventy (11ty), Decap CMS, Tailwind CSS, AlpineJS, and Netlify. The script provides four different project templates to meet various client needs.</p>
+<h2>Project Types</h2>
+<ol>
+<li>
+<p><strong>Basic Static Site</strong></p>
+<ul>
+<li>11ty with static content pages (Home, About, Services, Contacts)</li>
+<li>Tailwind CSS for styling</li>
+<li>AlpineJS for interactive elements</li>
+</ul>
+</li>
+<li>
+<p><strong>Multilanguage Static Site</strong></p>
+<ul>
+<li>Same as Basic Static Site</li>
+<li>Added multilanguage support</li>
+<li>Language switcher component</li>
+</ul>
+</li>
+<li>
+<p><strong>CMS-Enabled Site</strong></p>
+<ul>
+<li>11ty + Decap CMS integration</li>
+<li>Static pages (Home, About, Contact)</li>
+<li>Dynamic resources (configurable: Services, News, Properties, etc.)</li>
+<li>Tailwind CSS and AlpineJS</li>
+</ul>
+</li>
+<li>
+<p><strong>Multilanguage CMS-Enabled Site</strong></p>
+<ul>
+<li>Same as CMS-Enabled Site</li>
+<li>Added multilanguage support for all content</li>
+<li>Language switcher component</li>
+</ul>
+</li>
+</ol>
+<h2>Key Features</h2>
+<ul>
+<li>Command-line interface with project type selection</li>
+<li>Automatic setup of all required dependencies</li>
+<li>Pre-configured Netlify deployment settings</li>
+<li>Form handling through Netlify Forms</li>
+<li>Responsive design with Tailwind CSS</li>
+<li>Interactive components with AlpineJS</li>
+<li>Content management with Decap CMS (for types 3 &amp; 4)</li>
+<li>Multilanguage support (for types 2 &amp; 4)</li>
+</ul>
+<h2>Technical Requirements</h2>
+<ul>
+<li>Node.js environment</li>
+<li>NPM for package management</li>
+<li>Git for version control</li>
+<li>Netlify CLI for deployment configuration</li>
+</ul>
+<h2>User Flow</h2>
+<ol>
+<li>User runs the script</li>
+<li>Script prompts for project type selection</li>
+<li>User selects desired project type</li>
+<li>For CMS-enabled sites, user selects which dynamic resources to include</li>
+<li>Script generates the project with all necessary files and configurations</li>
+<li>User receives instructions for next steps (development, deployment)</li>
+</ol>
+<h2>Implementation Plan</h2>
+<ol>
+<li>Create base script structure with project type selection</li>
+<li>Implement template generation for each project type</li>
+<li>Configure build processes and dependencies</li>
+<li>Set up Netlify deployment configurations</li>
+<li>Add documentation and usage instructions</li>
+</ol>
+<h2>Technology Stack Details</h2>
+<ul>
+<li><strong>Eleventy (11ty)</strong>: Static site generator</li>
+<li><strong>Decap CMS</strong>: Headless CMS for content management</li>
+<li><strong>Tailwind CSS</strong>: Utility-first CSS framework</li>
+<li><strong>AlpineJS</strong>: Lightweight JavaScript framework for interactivity</li>
+<li><strong>Netlify</strong>: Hosting platform with integrated forms functionality</li>
+</ul>
+<h2>Success Criteria</h2>
+<ul>
+<li>Script successfully generates all four project types</li>
+<li>Generated projects run without errors</li>
+<li>CMS functionality works correctly</li>
+<li>Multilanguage support functions properly</li>
+<li>Projects deploy successfully to Netlify</li>
+<li>Form submissions work correctly</li>
+</ul>

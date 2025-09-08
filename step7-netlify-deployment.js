@@ -11,7 +11,8 @@ async function addNetlifyDeployment() {
       throw new Error('Project configuration not found. Please run step 1 first.');
     }
     const config = await fs.readJson(configPath);
-    const projectDir = path.join(process.cwd(), config.projectName);
+    // Use parent directory to match step2 behavior
+  const projectDir = path.join(process.cwd(), config.projectName);
 
     if (!fs.existsSync(projectDir)) {
         throw new Error('Project directory not found. Please run step 2 first.');

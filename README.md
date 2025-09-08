@@ -1,69 +1,73 @@
 # 11ty Website Generator
 
-This is a command-line tool to generate a modern, feature-rich website using 11ty, Tailwind CSS, Alpine.js, and Decap CMS.
+[![npm version](https://badge.fury.io/js/11ty-website-generator.svg)](https://badge.fury.io/js/11ty-website-generator)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Features
+A powerful CLI tool to generate modern 11ty websites with Tailwind CSS, Alpine.js, and optional CMS integration.
 
-- **11ty Static Site Generator**: Fast, flexible, and powerful.
-- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
-- **Alpine.js**: A rugged, minimal framework for composing JavaScript behavior in your markup.
-- **Decap CMS**: A git-based CMS for easy content management.
-- **Multi-language Support**: Generate a site with content in multiple languages.
-- **Dynamic Content**: Add dynamic resources like blogs, portfolios, or galleries.
-- **Netlify Deployment**: Pre-configured for easy deployment to Netlify.
-- **Automated Setup**: The script handles all the setup and configuration for you.
+## ✨ Features
 
-## Prerequisites
+- **🚀 11ty Static Site Generator**: Fast, flexible, and powerful
+- **🎨 Tailwind CSS**: Utility-first CSS framework for rapid UI development
+- **⚡ Alpine.js**: Lightweight JavaScript framework for interactive components
+- **📝 Decap CMS**: Git-based CMS for easy content management
+- **🌍 Multi-language Support**: Generate sites with content in multiple languages
+- **📱 Responsive Design**: Mobile-first, responsive layouts out of the box
+- **🔧 Dynamic Content**: Add blogs, portfolios, services, and more
+- **🚀 Netlify Ready**: Pre-configured for easy deployment to Netlify
+- **⚙️ Automated Setup**: Handles all setup and configuration automatically
+
+## 📋 Prerequisites
 
 - Node.js (v14 or higher)
-- npm
+- npm or yarn
 
-## Installation
+## 🚀 Quick Start
 
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/Max-Yterb/Generator.git
-    ```
-2.  Navigate to the project directory:
-    ```bash
-    cd Generator
-    ```
-3.  Install the dependencies:
-    ```bash
-    npm install
-    ```
-
-## Usage
-
-To run the generator, use the following command:
+### Global Installation (Recommended)
 
 ```bash
-node main.js
+npm install -g 11ty-website-generator
+create-11ty-site
 ```
 
-Or, if you have installed it globally:
+### One-time Use (npx)
 
 ```bash
-create-leadventor-site
+npx 11ty-website-generator
 ```
 
-The script will prompt you for the following information:
+### Local Development
 
-- **Project Name**: The name of your project.
-- **Author**: Your name.
-- **Default Language**: The default language for the site.
-- **Other Languages**: A comma-separated list of other languages to support.
-- **Dynamic Resources**: Select from a list of dynamic resources to add (e.g., Blog, Portfolio, Gallery).
+1. Clone the repository:
 
-The generator will then create a new directory with the specified project name and set up the entire project for you.
+   ```bash
+   git clone https://github.com/Max-Yterb/11ty-Website-Generator.git
+   cd 11ty-Website-Generator
+   ```
 
-## Scripts
+2. Install dependencies:
 
-- `npm test`: Run the test suite.
+   ```bash
+   npm install
+   ```
 
-## Project Structure
+3. Run the generator:
+   ```bash
+   node main.js
+   ```
 
-A generated project will have the following structure:
+## 🎯 Usage
+
+The generator will prompt you for:
+
+- **Project Name**: Name of your new website project
+- **Project Type**: Choose from Basic, Multilanguage, CMS, or Multilanguage + CMS
+- **Languages**: Select additional languages for multilanguage sites
+- **Dynamic Resources**: Add blogs, portfolios, services, properties, or products
+- **Author Information**: Your name and details
+
+## 📁 Generated Project Structure
 
 ```
 .
@@ -90,3 +94,76 @@ A generated project will have the following structure:
         ├── index.md
         └── services.md
 ```
+
+## 🛠️ Development Scripts
+
+After generating a project, use these commands:
+
+```bash
+# Start development server
+npm start
+
+# Start with CMS proxy (for CMS projects)
+npm run dev:cms
+
+# Build for production
+npm run build
+
+# Run tests
+npm test
+```
+
+## 🌍 Multilanguage Support
+
+For multilanguage projects:
+
+- Content is organized in language-specific folders (`/en`, `/es`, `/it`)
+- Automatic language switching in navigation
+- SEO-friendly URLs for each language
+- Centralized translation management
+
+## 📝 CMS Integration
+
+Decap CMS integration includes:
+
+- **Local Development**: Proxy backend for local editing
+- **Production**: Git Gateway integration with Netlify
+- **Content Types**: Automatic configuration for your selected resources
+- **Media Management**: Image uploads and organization
+- **Editorial Workflow**: Draft, review, and publish content
+
+## 🚀 Deployment
+
+### Netlify (Recommended)
+
+1. Push your project to GitHub
+2. Connect your repository to Netlify
+3. Build settings are pre-configured in `netlify.toml`
+4. Enable Netlify Identity for CMS projects
+
+### Other Platforms
+
+The generated sites work on any static hosting platform:
+
+- Vercel
+- GitHub Pages
+- Cloudflare Pages
+- AWS S3 + CloudFront
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+## 📄 License
+
+MIT © [Massimiliano Bertinetti](mailto:max.yterb@gmail.com)
+
+## 🆘 Support
+
+- 📖 [Documentation](https://github.com/Max-Yterb/11ty-Website-Generator/wiki)
+- 🐛 [Report Issues](https://github.com/Max-Yterb/11ty-Website-Generator/issues)
+- 💬 [Discussions](https://github.com/Max-Yterb/11ty-Website-Generator/discussions)
+
+---
+
+**Made with ❤️ by [Massimiliano Bertinetti](https://github.com/Max-Yterb)**

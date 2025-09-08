@@ -24,7 +24,8 @@ async function addStaticPages(config) {
       config = await fs.readJSON(configPath);
     }
 
-    const projectDir = path.join(process.cwd(), config.projectName);
+    // Use parent directory to match step2 behavior
+  const projectDir = path.join(process.cwd(), config.projectName);
 
     if (!fs.existsSync(projectDir)) {
       throw new Error('Project directory not found. Please run step 2 first.');
@@ -32,9 +33,10 @@ async function addStaticPages(config) {
 
     console.log('Creating header and footer partials...');
 
-    // Create header partial
-    await fs.writeFile(
-      path.join(projectDir, 'src', '_includes', 'partials', 'header.njk'),
+    // Create header partial (conditional based on multilanguage support)
+    const isMultilanguage = config.projectType.includes('multilanguage') && config.languages.length > 0;
+    
+    const headerContent = isMultilanguage ? 
       `<header class="bg-gray-800 text-white">
   <div class="container mx-auto px-4 py-4">
     <div class="flex justify-between items-center">
@@ -49,19 +51,48 @@ async function addStaticPages(config) {
       </nav>
     </div>
   </div>
-</header>`
+</header>` :
+      `<header class="bg-gray-800 text-white">
+  <div class="container mx-auto px-4 py-4">
+    <div class="flex justify-between items-center">
+      <a href="/" class="text-xl font-bold">{{ site.name }}</a>
+      <nav class="flex items-center space-x-8">
+        <ul class="flex space-x-4">
+          <li><a href="/" class="hover:text-gray-300">Home</a></li>
+          <li><a href="/about/" class="hover:text-gray-300">About</a></li>
+          <li><a href="/services/" class="hover:text-gray-300">Services</a></li>
+          <li><a href="/contact/" class="hover:text-gray-300">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>`;
+
+    await fs.writeFile(
+      path.join(projectDir, 'src', '_includes', 'partials', 'header.njk'),
+      headerContent
     );
 
-    // Create footer partial
-    await fs.writeFile(
-      path.join(projectDir, 'src', '_includes', 'partials', 'footer.njk'),
+    // Create footer partial (conditional based on multilanguage support)
+    const footerContent = isMultilanguage ?
       `<footer class="bg-gray-800 text-white py-6 mt-8">
   <div class="container mx-auto px-4">
     <div class="mt-6 pt-4 border-t border-gray-700 text-sm">
       <p>&copy; {% year %} {{ site.name }}. {{ 'rights_reserved' | t(locale) }}</p>
     </div>
   </div>
-</footer>`
+</footer>` :
+      `<footer class="bg-gray-800 text-white py-6 mt-8">
+  <div class="container mx-auto px-4">
+    <div class="mt-6 pt-4 border-t border-gray-700 text-sm">
+      <p>&copy; {% year %} {{ site.name }}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>`;
+
+    await fs.writeFile(
+      path.join(projectDir, 'src', '_includes', 'partials', 'footer.njk'),
+      footerContent
     );
 
     console.log('Creating static pages...');

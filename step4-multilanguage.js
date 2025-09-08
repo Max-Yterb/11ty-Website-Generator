@@ -36,7 +36,8 @@ async function addMultilanguageSupport(config) {
       return;
     }
 
-    const projectDir = path.join(process.cwd(), config.projectName);
+    // Use parent directory to match step2 behavior
+  const projectDir = path.join(process.cwd(), config.projectName);
 
     if (!fs.existsSync(projectDir)) {
       throw new Error('Project directory not found. Please run step 2 first.');
@@ -139,6 +140,26 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addShortcode("year", () => \`\${new Date().getFullYear()}\`);
   // Passthrough copy for assets
   eleventyConfig.addPassthroughCopy("src/assets");
+
+  // Add date filters using standard JavaScript
+  eleventyConfig.addFilter("date", function(dateObj, format) {
+    const date = new Date(dateObj);
+    
+    if (format === 'YYYY-MM-DD') {
+      return date.getFullYear() + '-' + 
+             String(date.getMonth() + 1).padStart(2, '0') + '-' + 
+             String(date.getDate()).padStart(2, '0');
+    }
+    
+    if (format === 'MMMM DD, YYYY') {
+      const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                     'July', 'August', 'September', 'October', 'November', 'December'];
+      return months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
+    }
+    
+    // Default format
+    return date.toLocaleDateString();
+  });
 
   // Add language code to permalink
   eleventyConfig.addFilter("localizedUrl", function(url, locale) {

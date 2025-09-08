@@ -22,7 +22,8 @@ async function addDynamicResources(config) {
       config = await fs.readJSON(configPath);
     }
 
-    const projectDir = path.join(process.cwd(), config.projectName);
+    // Use parent directory to match step2 behavior
+  const projectDir = path.join(process.cwd(), config.projectName);
     
     if (!fs.existsSync(projectDir)) {
       throw new Error('Project directory not found. Please run step 2 first.');

@@ -14,7 +14,7 @@ const PROJECT_TYPES = [
   '11ty with static content (Home, About, Services, Contacts)',
   '11ty with static content + multilanguage support',
   '11ty + Decap CMS with static and dynamic content',
-  '11ty + Decap CMS with static and dynamic content + multilanguage'
+  '11ty + Decap CMS with static and dynamic content + multilanguage',
 ];
 
 /**
@@ -29,22 +29,23 @@ async function getUserInput() {
         type: 'input',
         name: 'projectName',
         message: 'Project name:',
-        validate: input => {
+        validate: (input) => {
           if (input.trim() === '') return 'Project name is required';
+          // Check if directory exists in current directory
           if (fs.existsSync(path.join(process.cwd(), input))) {
             return 'Directory already exists. Please choose another name.';
           }
           return true;
-        }
+        },
       },
       {
         type: 'list',
         name: 'projectType',
         message: 'Select project type:',
-        choices: PROJECT_TYPES
-      }
+        choices: PROJECT_TYPES,
+      },
     ]);
-    
+
     // Additional questions based on project type
     if (answers.projectType.includes('CMS')) {
       const resources = await inquirer.prompt([
@@ -52,13 +53,20 @@ async function getUserInput() {
           type: 'checkbox',
           name: 'dynamicResources',
           message: 'Select dynamic resources to include:',
-          choices: ['Services', 'News/Blog', 'Properties', 'Portfolio', 'Products'],
-          validate: input => input.length > 0 ? true : 'Select at least one dynamic resource'
-        }
+          choices: [
+            'Services',
+            'News/Blog',
+            'Properties',
+            'Portfolio',
+            'Products',
+          ],
+          validate: (input) =>
+            input.length > 0 ? true : 'Select at least one dynamic resource',
+        },
       ]);
       answers.dynamicResources = resources.dynamicResources;
     }
-    
+
     // Language selection for multilanguage projects
     if (answers.projectType.includes('multilanguage')) {
       const langs = await inquirer.prompt([
@@ -67,19 +75,21 @@ async function getUserInput() {
           name: 'languages',
           message: 'Select languages to include (English is default):',
           choices: ['Spanish', 'Italian'],
-          default: ['Spanish']
-        }
+          default: ['Italian'],
+        },
       ]);
       answers.languages = ['English', ...langs.languages];
     }
-    
+
     // Save configuration to file for next steps
     const configPath = path.join(process.cwd(), 'project-config.json');
     await fs.writeJSON(configPath, answers, { spaces: 2 });
-    
+
     console.log(chalk.green('\n✅ Project configuration saved successfully!'));
-    console.log(chalk.yellow('\nRun the next step to create the base project structure.'));
-    
+    console.log(
+      chalk.yellow('\nRun the next step to create the base project structure.')
+    );
+
     return answers;
   } catch (error) {
     console.error(chalk.red('Error collecting user input:'), error);
