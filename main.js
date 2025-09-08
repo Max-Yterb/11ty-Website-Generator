@@ -4,6 +4,7 @@ const path = require('path');
 const chalk = require('chalk');
 const { getUserInput } = require('./step1-user-input');
 const { createBaseProject } = require('./step2-base-project');
+const { initializeGitRepository } = require('./step2b-git-init');
 const { addStaticPages } = require('./step3-static-pages');
 const { addMultilanguageSupport } = require('./step4-multilanguage');
 const { addCmsIntegration } = require('./step5-cms');
@@ -19,6 +20,10 @@ const steps = [
   {
     name: 'Creating base project',
     action: createBaseProject,
+  },
+  {
+    name: 'Initializing Git repository',
+    action: initializeGitRepository,
   },
   {
     name: 'Adding static pages',

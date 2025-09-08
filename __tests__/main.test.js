@@ -1,6 +1,7 @@
 const { main } = require('../main');
 const step1 = require('../step1-user-input');
 const step2 = require('../step2-base-project');
+const step2b = require('../step2b-git-init');
 const step3 = require('../step3-static-pages');
 const step4 = require('../step4-multilanguage');
 const step5 = require('../step5-cms');
@@ -9,6 +10,7 @@ const step7 = require('../step7-netlify-deployment');
 
 jest.mock('../step1-user-input', () => ({ getUserInput: jest.fn() }));
 jest.mock('../step2-base-project', () => ({ createBaseProject: jest.fn() }));
+jest.mock('../step2b-git-init', () => ({ initializeGitRepository: jest.fn() }));
 jest.mock('../step3-static-pages', () => ({ addStaticPages: jest.fn() }));
 jest.mock('../step4-multilanguage', () => ({ addMultilanguageSupport: jest.fn() }));
 jest.mock('../step5-cms', () => ({ addCmsIntegration: jest.fn() }));
@@ -26,6 +28,7 @@ describe('Main Script', () => {
     jest.clearAllMocks();
     step1.getUserInput.mockResolvedValue(mockConfig);
     step2.createBaseProject.mockResolvedValue();
+    step2b.initializeGitRepository.mockResolvedValue();
     step3.addStaticPages.mockResolvedValue();
     step4.addMultilanguageSupport.mockResolvedValue();
     step5.addCmsIntegration.mockResolvedValue();
@@ -38,6 +41,7 @@ describe('Main Script', () => {
 
     expect(step1.getUserInput).toHaveBeenCalledTimes(1);
     expect(step2.createBaseProject).toHaveBeenCalledWith(mockConfig);
+    expect(step2b.initializeGitRepository).toHaveBeenCalledWith(mockConfig);
     expect(step3.addStaticPages).toHaveBeenCalledWith(mockConfig);
     expect(step4.addMultilanguageSupport).toHaveBeenCalledWith(mockConfig);
     expect(step5.addCmsIntegration).toHaveBeenCalledWith(mockConfig);
