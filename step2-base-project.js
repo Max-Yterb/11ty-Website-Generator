@@ -9,6 +9,207 @@ console.log(chalk.cyan.bold(`11ty Website Generator`));
 console.log(chalk.cyan('Step 2: Creating Base 11ty Project\n'));
 
 /**
+ * Creates README.md file based on project type
+ */
+async function createReadme(projectDir, config) {
+  const isMultilanguage = config.projectType.includes('multilanguage');
+  const isCMS = config.projectType.includes('CMS');
+  
+  let readmeContent = `# ${config.projectName}
+
+Website created with 11ty Website Generator
+
+## 🚀 Quick Start
+
+1. **Install dependencies:**
+   \`\`\`bash
+   npm install
+   \`\`\`
+
+2. **Start development server:**
+   \`\`\`bash
+   npm start
+   \`\`\`
+
+   Your site will be available at \`http://localhost:8080\`
+
+3. **Build for production:**
+   \`\`\`bash
+   npm run build
+   \`\`\`
+
+## 📁 Project Structure
+
+\`\`\`
+${config.projectName}/
+├── src/
+│   ├── _data/           # Global data files
+│   ├── _includes/       # Templates and partials
+│   │   ├── layouts/     # Page layouts
+│   │   └── partials/    # Reusable components
+│   ├── assets/          # Static assets (CSS, JS, images)
+${isMultilanguage ? '│   ├── en/              # English content\n│   ├── es/              # Spanish content (if applicable)\n│   ├── it/              # Italian content (if applicable)\n' : ''}${isCMS ? '│   ├── admin/           # Decap CMS configuration\n│   ├── pages/           # CMS-managed pages\n' : ''}│   └── index.njk        # Homepage
+├── _site/               # Generated site (do not edit)
+├── .eleventy.js         # Eleventy configuration
+├── package.json         # Dependencies and scripts
+└── tailwind.config.js   # Tailwind CSS configuration
+\`\`\`
+
+## 🛠️ Technologies Used
+
+- **[Eleventy](https://www.11ty.dev/)** - Static site generator
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[Alpine.js](https://alpinejs.dev/)** - Lightweight JavaScript framework
+- **[Nunjucks](https://mozilla.github.io/nunjucks/)** - Templating engine
+`;
+
+  if (isMultilanguage) {
+    readmeContent += `
+## 🌍 Multilanguage Support
+
+This project supports multiple languages:
+${config.languages ? config.languages.map(lang => `- ${lang.toUpperCase()}`).join('\n') : '- EN (English)\n- ES (Spanish)\n- IT (Italian)'}
+
+### Adding Content
+
+1. **Create language-specific pages** in \`src/{language}/\` folders
+2. **Use the \`t\` filter** for translations: \`{{ 'key' | t(locale) }}\`
+3. **Add translations** to \`src/_data/i18n.js\`
+
+### Language Switching
+
+The language switcher is available in the header. Users can switch between available languages seamlessly.
+`;
+  }
+
+  if (isCMS) {
+    readmeContent += `
+## 📝 Content Management (Decap CMS)
+
+This project includes Decap CMS for easy content management.
+
+### For Production (Netlify):
+
+1. **Deploy to Netlify** and enable Git Gateway
+2. **Enable Netlify Identity** in your site settings
+3. **Access the CMS** at \`https://yoursite.netlify.app/admin/\`
+
+### For Local Development:
+
+1. **Install dependencies** (already included):
+   \`\`\`bash
+   npm install
+   \`\`\`
+
+2. **Start the development server with CMS proxy:**
+   \`\`\`bash
+   npm run dev:cms
+   \`\`\`
+   
+   Or run separately:
+   \`\`\`bash
+   # Terminal 1: Start the site
+   npm start
+   
+   # Terminal 2: Start the CMS proxy
+   npm run cms:proxy
+   \`\`\`
+
+3. **Access the local CMS** at \`http://localhost:8080/admin/\`
+
+### CMS Configuration
+
+- **Config file:** \`src/admin/config.yml\`
+- **Collections:** Pages${isMultilanguage ? ', Multilanguage Pages' : ''}
+- **Media folder:** \`src/assets/images/uploads\`
+
+### Switching Between Local and Production
+
+In \`src/admin/config.yml\`:
+
+**For local development:**
+\`\`\`yaml
+# Uncomment for local development:
+backend:
+  name: proxy
+  proxy_url: http://localhost:8081/api/v1
+  branch: main
+
+# Comment out for local development:
+# backend:
+#   name: git-gateway
+#   branch: main
+\`\`\`
+
+**For production:**
+\`\`\`yaml
+# Comment out for production:
+# backend:
+#   name: proxy
+#   proxy_url: http://localhost:8081/api/v1
+#   branch: main
+
+# Uncomment for production:
+backend:
+  name: git-gateway
+  branch: main
+\`\`\`
+`;
+  }
+
+  readmeContent += `
+## 🎨 Customization
+
+### Styling
+
+- **Tailwind CSS** classes can be used throughout your templates
+- **Custom CSS** can be added to \`src/assets/css/\`
+- **Tailwind configuration** is in \`tailwind.config.js\`
+
+### JavaScript
+
+- **Alpine.js** is available globally for interactive components
+- **Custom JavaScript** can be added to \`src/assets/js/\`
+
+### Templates
+
+- **Layouts** are in \`src/_includes/layouts/\`
+- **Partials** are in \`src/_includes/partials/\`
+- **Data files** are in \`src/_data/\`
+
+## 📚 Learn More
+
+- [Eleventy Documentation](https://www.11ty.dev/docs/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Alpine.js Documentation](https://alpinejs.dev/start-here)
+- [Nunjucks Documentation](https://mozilla.github.io/nunjucks/templating.html)
+${isCMS ? '- [Decap CMS Documentation](https://decapcms.org/docs/)\n' : ''}
+## 🚀 Deployment
+
+### Netlify (Recommended)
+
+1. **Connect your repository** to Netlify
+2. **Build settings:**
+   - Build command: \`npm run build\`
+   - Publish directory: \`_site\`
+${isCMS ? '3. **Enable Git Gateway and Netlify Identity** for CMS access\n' : ''}
+### Other Platforms
+
+This is a static site that can be deployed to any static hosting service:
+- Vercel
+- GitHub Pages
+- Surge.sh
+- Firebase Hosting
+
+---
+
+*Generated with [11ty Website Generator](https://github.com/your-repo)*
+`;
+
+  await fs.writeFile(path.join(projectDir, 'README.md'), readmeContent);
+}
+
+/**
  * Creates the base 11ty project structure with Tailwind CSS and Alpine.js
  */
 async function createBaseProject(config) {
@@ -169,6 +370,10 @@ collections:
 `
       );
     }
+
+    // Create README.md
+    console.log('Creating README.md...');
+    await createReadme(projectDir, config);
 
     console.log(chalk.green('\n✅ Base 11ty project created successfully!'));
     console.log(chalk.yellow('\nRun the next step to add static pages.'));

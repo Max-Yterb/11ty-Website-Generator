@@ -57,12 +57,20 @@ async function addCmsIntegration(config) {
 </html>`
     );
     
-    // Create config.yml
+    // Create config.yml with both production and local development backends
     await fs.writeFile(
       path.join(projectDir, 'src', 'admin', 'config.yml'),
-      `backend:
+      `# Backend configuration
+# For production (Netlify):
+backend:
   name: git-gateway
   branch: main # Branch to update (optional; defaults to master)
+
+# For local development, uncomment the following and comment out git-gateway:
+# backend:
+#   name: proxy
+#   proxy_url: http://localhost:8081/api/v1
+#   branch: main # optional, defaults to master
 
 # Publish mode for editorial workflow
 publish_mode: editorial_workflow
@@ -125,7 +133,23 @@ ${config.projectType.includes('multilanguage') ? `
     
     packageJson.dependencies = {
       ...packageJson.dependencies,
+      'react': '^18.2.0',
+      'react-dom': '^18.2.0',
       'decap-cms': '^3.0.0'
+    };
+    
+    // Add decap-server for local development
+    packageJson.devDependencies = {
+      ...packageJson.devDependencies,
+      '@decaporg/decap-server': '^3.0.0',
+      'concurrently': '^8.2.0'
+    };
+    
+    // Add scripts for local CMS development
+    packageJson.scripts = {
+      ...packageJson.scripts,
+      'cms:proxy': 'decap-server',
+      'dev:cms': 'concurrently "npm run serve" "npm run cms:proxy"'
     };
     
     await fs.writeJSON(packageJsonPath, packageJson, { spaces: 2 });
