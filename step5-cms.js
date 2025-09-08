@@ -141,7 +141,7 @@ ${config.projectType.includes('multilanguage') ? `
     // Add decap-server for local development
     packageJson.devDependencies = {
       ...packageJson.devDependencies,
-      '@decaporg/decap-server': '^3.0.0',
+      'decap-server': '^3.3.1',
       'concurrently': '^8.2.0'
     };
     
