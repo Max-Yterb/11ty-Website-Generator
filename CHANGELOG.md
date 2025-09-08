@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/Max-Yterb/Generator/compare/v1.1.0...v1.2.0) (2025-09-08)
+
+
+### Features
+
+* add proxy backend support for CMS local development and comprehensive README templates ([7576818](https://github.com/Max-Yterb/Generator/commit/757681859f8ddf7a951ff00d0b08a49b5521a702))
+
 ## [1.1.0](https://github.com/Max-Yterb/Generator/compare/v1.0.3...v1.1.0) (2025-09-03)
 
 
