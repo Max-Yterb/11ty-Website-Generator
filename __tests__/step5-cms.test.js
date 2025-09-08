@@ -81,12 +81,17 @@ describe('CMS Integration', () => {
     );
   });
 
-  test('should create sample page', async () => {
-    await addCmsIntegration(mockConfig);
+  test('should create sample content for dynamic resources', async () => {
+    const configWithResources = {
+      ...mockConfig,
+      dynamicResources: ['News/Blog']
+    };
+    
+    await addCmsIntegration(configWithResources);
 
     expect(fs.writeFile).toHaveBeenCalledWith(
-      expect.stringContaining(path.join('src', 'pages', 'sample-page.md')),
-      expect.stringContaining('Sample CMS Page')
+      expect.stringContaining(path.join('src', 'blog', 'sample-blog-post.md')),
+      expect.stringContaining('Welcome to Our Blog')
     );
   });
 
@@ -94,14 +99,15 @@ describe('CMS Integration', () => {
     const multiConfig = {
       ...mockConfig,
       projectType: ['CMS', 'multilanguage'],
-      languages: ['en', 'es']
+      languages: ['en', 'es'],
+      dynamicResources: ['News/Blog']
     };
 
     await addCmsIntegration(multiConfig);
 
     expect(fs.writeFile).toHaveBeenCalledWith(
       expect.stringContaining(path.join('src', 'admin', 'config.yml')),
-      expect.stringContaining('pages_es')
+      expect.stringContaining('blog_es')
     );
   });
 
