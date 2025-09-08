@@ -1,0 +1,127 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run tests
+        run: npm test
+        
+      - name: Build documentation site
+        run: |
+          mkdir -p docs
+          cp README.md docs/index.md
+          cp CONTRIBUTING.md docs/
+          cp CHANGELOG.md docs/
+          cp LICENSE docs/
+          
+          # Create a simple HTML index
+          cat > docs/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>11ty Website Generator</title>
+              <style>
+                  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.6; }
+                  h1 { color: #2563eb; }
+                  .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 8px; margin-bottom: 2rem; }
+                  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 2rem 0; }
+                  .feature { background: #f8fafc; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #2563eb; }
+                  .cta { background: #2563eb; color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; display: inline-block; margin: 1rem 0; }
+                  .cta:hover { background: #1d4ed8; }
+                  code { background: #f1f5f9; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Monaco', 'Consolas', monospace; }
+                  pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; overflow-x: auto; }
+              </style>
+          </head>
+          <body>
+              <div class="hero">
+                  <h1>🚀 11ty Website Generator</h1>
+                  <p>A powerful CLI tool to generate modern 11ty websites with CMS integration, multilanguage support, and automated deployment.</p>
+                  <a href="https://github.com/Max-Yterb/11ty-Website-Generator" class="cta">View on GitHub</a>
+              </div>
+              
+              <h2>✨ Features</h2>
+              <div class="features">
+                  <div class="feature">
+                      <h3>🎨 Multiple Project Types</h3>
+                      <p>Choose from 5 different project configurations to match your needs</p>
+                  </div>
+                  <div class="feature">
+                      <h3>🌍 Multilanguage Support</h3>
+                      <p>Built-in internationalization with language switching</p>
+                  </div>
+                  <div class="feature">
+                      <h3>📝 CMS Integration</h3>
+                      <p>Netlify CMS integration for easy content management</p>
+                  </div>
+                  <div class="feature">
+                      <h3>🚀 Auto Deployment</h3>
+                      <p>Automated Netlify deployment configuration</p>
+                  </div>
+              </div>
+              
+              <h2>🚀 Quick Start</h2>
+              <pre><code>npx create-11ty-site my-awesome-site
+cd my-awesome-site
+npm run dev</code></pre>
+              
+              <h2>📚 Documentation</h2>
+              <ul>
+                  <li><a href="README.md">README</a></li>
+                  <li><a href="CONTRIBUTING.md">Contributing Guide</a></li>
+                  <li><a href="CHANGELOG.md">Changelog</a></li>
+                  <li><a href="LICENSE">License</a></li>
+              </ul>
+              
+              <h2>🤝 Contributing</h2>
+              <p>We welcome contributions! Please see our <a href="CONTRIBUTING.md">Contributing Guide</a> for details.</p>
+              
+              <footer style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e2e8f0; text-align: center; color: #64748b;">
+                  <p>Made with ❤️ by <a href="https://github.com/Max-Yterb">Massimiliano Bertinetti</a></p>
+              </footer>
+          </body>
+          </html>
+          EOF
+        
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './docs'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

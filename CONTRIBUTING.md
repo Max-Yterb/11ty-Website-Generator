@@ -22,6 +22,7 @@ Thank you for your interest in contributing to the 11ty Website Generator! 🎉
 ## 🛠️ Development Setup
 
 ### Running Tests
+
 ```bash
 # Run all tests
 npm test
@@ -34,12 +35,14 @@ npm run test:coverage
 ```
 
 ### Code Formatting
+
 ```bash
 # Format code with Prettier
 npm run format
 ```
 
 ### Testing the Generator
+
 ```bash
 # Run the generator locally
 node main.js
@@ -54,13 +57,16 @@ node main.js
 ## 📝 Contribution Guidelines
 
 ### Code Style
+
 - Use Prettier for code formatting (run `npm run format`)
 - Follow existing code patterns and conventions
 - Add comments for complex logic
 - Use meaningful variable and function names
 
 ### Commit Messages
+
 Use conventional commit format:
+
 - `feat: add new feature`
 - `fix: resolve bug`
 - `docs: update documentation`
@@ -127,6 +133,7 @@ Please be respectful and constructive in all interactions. We're building this t
 ## 📞 Questions?
 
 Feel free to:
+
 - Open a [Discussion](https://github.com/Max-Yterb/11ty-Website-Generator/discussions)
 - Create an [Issue](https://github.com/Max-Yterb/11ty-Website-Generator/issues)
 - Contact [Massimiliano Bertinetti](mailto:max.yterb@gmail.com)

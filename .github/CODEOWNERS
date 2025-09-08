@@ -1,0 +1,39 @@
+# Global code owner
+* @Max-Yterb
+
+# Documentation
+*.md @Max-Yterb
+CONTRIBUTING.md @Max-Yterb
+README.md @Max-Yterb
+
+# Package and dependencies
+package.json @Max-Yterb
+package-lock.json @Max-Yterb
+
+# Configuration files
+*.yml @Max-Yterb
+*.yaml @Max-Yterb
+.prettierrc @Max-Yterb
+.gitignore @Max-Yterb
+.versionrc.js @Max-Yterb
+
+# GitHub workflows and settings
+.github/ @Max-Yterb
+
+# Core generator files
+main.js @Max-Yterb
+generator.js @Max-Yterb
+step*.js @Max-Yterb
+
+# Tests
+__tests__/ @Max-Yterb
+jest.config.js @Max-Yterb
+
+# Assets
+assets/ @Max-Yterb
+*.svg @Max-Yterb
+
+# Project documentation
+PRD.md @Max-Yterb
+CHANGELOG.md @Max-Yterb
+LICENSE @Max-Yterb

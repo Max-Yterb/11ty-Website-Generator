@@ -15,10 +15,21 @@
     "static-site",
     "generator",
     "cms",
-    "multilanguage"
+    "multilanguage",
+    "cli",
+    "netlify",
+    "eleventy"
   ],
   "author": "Massimiliano Bertinetti <max.yterb@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Max-Yterb/11ty-Website-Generator.git"
+  },
+  "homepage": "https://max-yterb.github.io/11ty-Website-Generator",
+  "bugs": {
+    "url": "https://github.com/Max-Yterb/11ty-Website-Generator/issues"
+  },
   "dependencies": {
     "chalk": "^4.1.2",
     "fs-extra": "^11.1.1",
