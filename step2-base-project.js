@@ -29,7 +29,10 @@ ${config.projectName}/
 │   │   ├── layouts/     # Page layouts
 │   │   └── partials/    # Reusable components
 │   ├── assets/          # Static assets (CSS, JS, images)
-${isMultilanguage ? '│   ├── en/              # English content\n│   ├── es/              # Spanish content (if applicable)\n│   ├── it/              # Italian content (if applicable)\n' : ''}${isCMS ? '│   ├── admin/           # Decap CMS configuration\n│   ├── pages/           # CMS-managed pages\n' : ''}│   └── index.njk        # Homepage
+${isMultilanguage ? '│   ├── en/              # English content\n│   ├── es/              # Spanish content (if applicable)\n│   ├── it/              # Italian content (if applicable)\n' : ''}${isCMS ? '│   ├── admin/           # Decap CMS configuration\n' : ''}${config.dynamicResources && config.dynamicResources.length > 0 ? config.dynamicResources.map(resource => {
+    const folderName = resource === 'News/Blog' ? 'blog' : resource === 'Services' ? 'services' : resource === 'Properties' ? 'properties' : resource === 'Portfolio' ? 'portfolio' : resource === 'Products' ? 'products' : resource.toLowerCase();
+    return `│   ├── ${folderName}/           # ${resource} content`;
+  }).join('\n') + '\n' : ''}│   └── index.njk        # Homepage
 ├── _site/               # Generated site (do not edit)
 ├── .eleventy.js         # Eleventy configuration
 ├── package.json         # Dependencies and scripts
@@ -65,76 +68,9 @@ The language switcher is available in the header. Users can switch between avail
 
   if (isCMS) {
     readmeContent += `
-## 📝 Content Management (Decap CMS)
+## 📝 Content Management
 
-This project includes Decap CMS for easy content management.
-
-### For Production (Netlify):
-
-1. **Deploy to Netlify** and enable Git Gateway
-2. **Enable Netlify Identity** in your site settings
-3. **Access the CMS** at \`https://yoursite.netlify.app/admin/\`
-
-### For Local Development:
-
-1. **Install dependencies** (already included):
-   \`\`\`bash
-   npm install
-   \`\`\`
-
-2. **Start the development server with CMS proxy:**
-   \`\`\`bash
-   npm run dev:cms
-   \`\`\`
-   
-   Or run separately:
-   \`\`\`bash
-   # Terminal 1: Start the site
-   npm start
-   
-   # Terminal 2: Start the CMS proxy
-   npm run cms:proxy
-   \`\`\`
-
-3. **Access the local CMS** at \`http://localhost:8080/admin/\`
-
-### CMS Configuration
-
-- **Config file:** \`src/admin/config.yml\`
-- **Collections:** Pages${isMultilanguage ? ', Multilanguage Pages' : ''}
-- **Media folder:** \`src/assets/images/uploads\`
-
-### Switching Between Local and Production
-
-In \`src/admin/config.yml\`:
-
-**For local development:**
-\`\`\`yaml
-# Uncomment for local development:
-backend:
-  name: proxy
-  proxy_url: http://localhost:8081/api/v1
-  branch: main
-
-# Comment out for local development:
-# backend:
-#   name: git-gateway
-#   branch: main
-\`\`\`
-
-**For production:**
-\`\`\`yaml
-# Comment out for production:
-# backend:
-#   name: proxy
-#   proxy_url: http://localhost:8081/api/v1
-#   branch: main
-
-# Uncomment for production:
-backend:
-  name: git-gateway
-  branch: main
-\`\`\`
+This project includes Decap CMS integration. CMS setup and configuration will be completed in Step 5.
 `;
   }
 
@@ -256,6 +192,26 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addShortcode("year", () => \`\${new Date().getFullYear()}\`);
   eleventyConfig.addPassthroughCopy("src/assets");
 
+  // Add date filters using standard JavaScript
+  eleventyConfig.addFilter("date", function(dateObj, format) {
+    const date = new Date(dateObj);
+    
+    if (format === 'YYYY-MM-DD') {
+      return date.getFullYear() + '-' + 
+             String(date.getMonth() + 1).padStart(2, '0') + '-' + 
+             String(date.getDate()).padStart(2, '0');
+    }
+    
+    if (format === 'MMMM DD, YYYY') {
+      const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                     'July', 'August', 'September', 'October', 'November', 'December'];
+      return months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
+    }
+    
+    // Default format
+    return date.toLocaleDateString();
+  });
+
   return {
     dir: {
       input: "src",
@@ -325,32 +281,8 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // Create CMS configuration if specified
-    if (config.projectType.includes('CMS')) {
-      console.log('Creating CMS configuration...');
-      const adminDir = path.join(projectDir, 'src', 'admin');
-      await fs.ensureDir(adminDir);
-      await fs.writeFile(
-        path.join(adminDir, 'config.yml'),
-        `backend:
-  name: git-gateway
-  branch: main # Branch to update (optional; defaults to master)
-
-media_folder: "src/assets/images" # Media files will be stored in the repo under images/uploads
-
-collections:
-  - name: "pages"
-    label: "Pages"
-    files:
-      - file: "src/_data/pages.json"
-        label: "All Pages"
-        name: "pages"
-        fields:
-          - { label: "Title", name: "title", widget: "string" }
-          - { label: "Body", name: "body", widget: "markdown" }
-`
-      );
-    }
+    // CMS configuration will be handled by Step 5 if this is a CMS project
+    // This ensures proper configuration with both local development and production backends
 
     // Create README.md
     console.log('Creating README.md...');

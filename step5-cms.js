@@ -9,6 +9,98 @@ console.log(chalk.cyan.bold(`11ty Website Generator`));
 console.log(chalk.cyan('Step 5: Adding Decap CMS Integration\n'));
 
 /**
+ * Updates README with comprehensive CMS instructions
+ */
+async function updateReadmeWithCmsInstructions(projectDir, config) {
+  const readmePath = path.join(projectDir, 'README.md');
+  let readmeContent = await fs.readFile(readmePath, 'utf8');
+
+  // Find and replace the CMS section
+  const cmsSection = `## 📝 Content Management (Decap CMS)
+
+This project includes Decap CMS for easy content management.
+
+### For Production (Netlify):
+
+1. **Deploy to Netlify** and enable Git Gateway
+2. **Enable Netlify Identity** in your site settings
+3. **Access the CMS** at \`https://yoursite.netlify.app/admin/\`
+
+### For Local Development:
+
+1. **Install dependencies** (already included):
+   \`\`\`bash
+   npm install
+   \`\`\`
+
+2. **Start the development server with CMS proxy:**
+   \`\`\`bash
+   npm run dev:cms
+   \`\`\`
+   
+   Or run separately:
+   \`\`\`bash
+   # Terminal 1: Start the site
+   npm start
+   
+   # Terminal 2: Start the CMS proxy
+   npm run cms:proxy
+   \`\`\`
+
+3. **Access the local CMS** at \`http://localhost:8080/admin/\`
+
+### CMS Configuration
+
+- **Config file:** \`src/admin/config.yml\`
+- **Collections:** ${config.dynamicResources && config.dynamicResources.length > 0 ? config.dynamicResources.join(', ') : 'Dynamic Content'}
+- **Media folder:** \`src/assets/images/uploads\`
+
+### Switching Between Local and Production
+
+The CMS configuration is set up for local development by default. To switch:
+
+**For local development (default):**
+\`\`\`yaml
+backend:
+  name: proxy
+  proxy_url: http://localhost:8081/api/v1
+  branch: main
+\`\`\`
+
+**For production (uncomment in config.yml):**
+\`\`\`yaml
+backend:
+  name: git-gateway
+  branch: main
+\`\`\`
+
+### Troubleshooting
+
+- **API Error 404**: Make sure the CMS proxy server is running (\`npm run cms:proxy\`)
+- **Cannot access /admin**: Ensure the development server is running (\`npm start\`)
+- **Authentication issues**: Check Netlify Identity settings for production
+`;
+
+  // Replace the existing CMS section or add it after the main description
+  if (readmeContent.includes('## 📝 Content Management')) {
+    readmeContent = readmeContent.replace(
+      /## 📝 Content Management[\s\S]*?(?=\n## |$)/,
+      cmsSection
+    );
+  } else {
+    // Find a good place to insert the CMS section
+    const insertAfter = readmeContent.indexOf('## 🎨 Customization');
+    if (insertAfter !== -1) {
+      readmeContent = readmeContent.slice(0, insertAfter) + cmsSection + '\n\n' + readmeContent.slice(insertAfter);
+    } else {
+      readmeContent += '\n\n' + cmsSection;
+    }
+  }
+
+  await fs.writeFile(readmePath, readmeContent);
+}
+
+/**
  * Adds Decap CMS integration to the project
  */
 async function addCmsIntegration(config) {
@@ -708,6 +800,10 @@ layout: layouts/base.njk
         await fs.writeFile(baseLayoutPath, baseLayoutContent);
       }
     }
+
+    // Update README with CMS instructions
+    console.log('Updating README with CMS instructions...');
+    await updateReadmeWithCmsInstructions(projectDir, config);
 
     console.log(chalk.green('\n✅ Decap CMS integration added successfully!'));
     console.log(chalk.yellow('\nRun the next step to add dynamic resources.'));

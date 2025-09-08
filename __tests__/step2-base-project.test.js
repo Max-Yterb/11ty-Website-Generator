@@ -95,7 +95,7 @@ describe('Base Project Setup', () => {
     expect(fs.ensureDir).toHaveBeenCalledWith(expect.stringContaining('es'));
   });
 
-  test('should create CMS configuration if specified', async () => {
+  test('should not create CMS configuration (handled by Step 5)', async () => {
     const cmsConfig = {
       ...mockConfig,
       projectType: ['basic', 'CMS']
@@ -103,8 +103,9 @@ describe('Base Project Setup', () => {
 
     await createBaseProject(cmsConfig);
 
-    expect(fs.ensureDir).toHaveBeenCalledWith(expect.stringContaining('admin'));
-    expect(fs.writeFile).toHaveBeenCalledWith(
+    // CMS configuration should NOT be created in Step 2
+    expect(fs.ensureDir).not.toHaveBeenCalledWith(expect.stringContaining('admin'));
+    expect(fs.writeFile).not.toHaveBeenCalledWith(
       expect.stringContaining('config.yml'),
       expect.stringContaining('backend:')
     );
