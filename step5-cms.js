@@ -61,16 +61,16 @@ async function addCmsIntegration(config) {
     await fs.writeFile(
       path.join(projectDir, 'src', 'admin', 'config.yml'),
       `# Backend configuration
-# For production (Netlify):
+# For local development (default):
 backend:
-  name: git-gateway
-  branch: main # Branch to update (optional; defaults to master)
+  name: proxy
+  proxy_url: http://localhost:8081/api/v1
+  branch: main # optional, defaults to master
 
-# For local development, uncomment the following and comment out git-gateway:
+# For production (Netlify), uncomment the following and comment out proxy:
 # backend:
-#   name: proxy
-#   proxy_url: http://localhost:8081/api/v1
-#   branch: main # optional, defaults to master
+#   name: git-gateway
+#   branch: main # Branch to update (optional; defaults to master)
 
 # Publish mode for editorial workflow
 publish_mode: editorial_workflow
