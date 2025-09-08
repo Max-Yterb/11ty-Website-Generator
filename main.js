@@ -69,8 +69,16 @@ async function main() {
     console.log(chalk.cyan('\nNext steps:'));
     console.log(`1. cd ${config.projectName}`);
     console.log('2. npm install');
-    console.log('3. npm start');
-    console.log('\nYour website will be available at http://localhost:8080\n');
+    
+    // Show appropriate start command based on project type
+    if (config.projectType.includes('CMS')) {
+      console.log('3. npm run dev:cms');
+      console.log('\nYour website will be available at http://localhost:8080');
+      console.log('CMS admin will be available at http://localhost:8080/admin/\n');
+    } else {
+      console.log('3. npm start');
+      console.log('\nYour website will be available at http://localhost:8080\n');
+    }
 
   } catch (error) {
     console.error(chalk.red('\n❌ An error occurred during project generation:'), error);

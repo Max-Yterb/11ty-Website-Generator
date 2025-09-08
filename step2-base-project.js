@@ -19,26 +19,7 @@ async function createReadme(projectDir, config) {
 
 Website created with 11ty Website Generator
 
-## 🚀 Quick Start
-
-1. **Install dependencies:**
-   \`\`\`bash
-   npm install
-   \`\`\`
-
-2. **Start development server:**
-   \`\`\`bash
-   npm start
-   \`\`\`
-
-   Your site will be available at \`http://localhost:8080\`
-
-3. **Build for production:**
-   \`\`\`bash
-   npm run build
-   \`\`\`
-
-## 📁 Project Structure
+${isCMS ? '' : '## 🚀 Quick Start\n\n1. **Install dependencies:**\n   \\`\\`\\`bash\n   npm install\n   \\`\\`\\`\n\n2. **Start development server:**\n   \\`\\`\\`bash\n   npm start\n   \\`\\`\\`\n\n   Your site will be available at \\`http://localhost:8080\\`\n\n3. **Build for production:**\n   \\`\\`\\`bash\n   npm run build\n   \\`\\`\\`\n\n'}## 📁 Project Structure
 
 \`\`\`
 ${config.projectName}/

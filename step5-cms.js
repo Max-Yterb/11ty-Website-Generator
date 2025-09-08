@@ -149,7 +149,7 @@ ${config.projectType.includes('multilanguage') ? `
     packageJson.scripts = {
       ...packageJson.scripts,
       'cms:proxy': 'decap-server',
-      'dev:cms': 'concurrently "npm run serve" "npm run cms:proxy"'
+      'dev:cms': 'concurrently "npm run start" "npm run cms:proxy"'
     };
     
     await fs.writeJSON(packageJsonPath, packageJson, { spaces: 2 });
