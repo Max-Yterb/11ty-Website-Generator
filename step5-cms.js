@@ -349,19 +349,19 @@ collections:`;
             for (const field of resourceConfig.fields) {
                if (field.widget === 'hidden') {
                  configContent += `
-       - {label: "${field.label}", name: "${field.name}", widget: "${field.widget}", default: "${field.default}"}`;
+      - {label: "${field.label}", name: "${field.name}", widget: "${field.widget}", default: "${field.default}"}`;
                } else if (field.widget === 'select') {
                  configContent += `
-       - {label: "${field.label}", name: "${field.name}", widget: "${field.widget}", options: [${field.options.map(opt => `"${opt}"`).join(', ')}]${field.required === false ? ', required: false' : ''}}`;
+      - {label: "${field.label}", name: "${field.name}", widget: "${field.widget}", options: [${field.options.map(opt => `"${opt}"`).join(', ')}]${field.required === false ? ', required: false' : ''}}`;
                } else if (field.widget === 'list' && field.field) {
                  configContent += `
-       - {label: "${field.label}", name: "${field.name}", widget: "${field.widget}", field: {label: "${field.field.label}", name: "${field.field.name}", widget: "${field.field.widget}"}${field.required === false ? ', required: false' : ''}}`;
+      - {label: "${field.label}", name: "${field.name}", widget: "${field.widget}", field: {label: "${field.field.label}", name: "${field.field.name}", widget: "${field.field.widget}"}${field.required === false ? ', required: false' : ''}}`;
                } else if (field.widget === 'list' && field.fields) {
                  configContent += `
-       - {label: "${field.label}", name: "${field.name}", widget: "${field.widget}", fields: [${field.fields.map(f => `{label: "${f.label}", name: "${f.name}", widget: "${f.widget}"}`).join(', ')}]${field.required === false ? ', required: false' : ''}}`;
+      - {label: "${field.label}", name: "${field.name}", widget: "${field.widget}", fields: [${field.fields.map(f => `{label: "${f.label}", name: "${f.name}", widget: "${f.widget}"}`).join(', ')}]${field.required === false ? ', required: false' : ''}}`;
                } else {
                  configContent += `
-       - {label: "${field.label}", name: "${field.name}", widget: "${field.widget}"${field.default !== undefined ? `, default: ${typeof field.default === 'boolean' ? field.default : `"${field.default}"`}` : ''}${field.required === false ? ', required: false' : ''}}`;
+      - {label: "${field.label}", name: "${field.name}", widget: "${field.widget}"${field.default !== undefined ? `, default: ${typeof field.default === 'boolean' ? field.default : `"${field.default}"`}` : ''}${field.required === false ? ', required: false' : ''}}`;
                }
              }
 
