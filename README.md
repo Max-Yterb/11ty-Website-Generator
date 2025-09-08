@@ -37,6 +37,9 @@ create-11ty-site
 npx 11ty-website-generator
 ```
 
+> **📦 Now Available on NPM!** 
+> The package is published as `11ty-website-generator@2.0.0` and ready for global installation.
+
 ### Local Development
 
 1. Clone the repository:
