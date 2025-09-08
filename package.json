@@ -1,6 +1,6 @@
 {
   "name": "11ty-website-generator",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "A CLI tool to generate modern 11ty websites with CMS integration, multilanguage support, and automated deployment",
   "main": "main.js",
   "scripts": {

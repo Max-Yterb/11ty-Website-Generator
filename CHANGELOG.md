@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/Max-Yterb/11ty-Website-Generator/compare/v1.3.0...v2.0.0) (2025-09-08)
+
+
+### Features
+
+* transform to public open-source project ([1c46b1f](https://github.com/Max-Yterb/11ty-Website-Generator/commit/1c46b1fb03cb81fb0f00a14ad30a9ee70f1e9b2d))
+* transform to public open-source repository ([a2ff696](https://github.com/Max-Yterb/11ty-Website-Generator/commit/a2ff696ed66d19a3914f0e6c9eea8c9f93141824))
+
+
+### Bug Fixes
+
+* resolve YAML syntax error in GitHub Pages workflow ([ef7159a](https://github.com/Max-Yterb/11ty-Website-Generator/commit/ef7159a199a887ab324423e8bc8158af853a00d0))
+* resolve YAML syntax errors and add validation script ([b70a07c](https://github.com/Max-Yterb/11ty-Website-Generator/commit/b70a07c47581ae18665f404dbf651ad7521dbe0c))
+* Weird colors on GH Pages ([56f530c](https://github.com/Max-Yterb/11ty-Website-Generator/commit/56f530c0a189712330be1e89a357626d02bdee28))
+
 ## [1.2.0](https://github.com/Max-Yterb/11ty-Website-Generator/compare/v1.3.0...v1.2.0) (2025-09-08)
 
 
