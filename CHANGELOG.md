@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/Max-Yterb/Generator/compare/v1.2.0...v1.3.0) (2025-09-08)
+
+
+### Features
+
+* add Git repository initialization step to generator ([0a07616](https://github.com/Max-Yterb/Generator/commit/0a0761621092d4a0c091b6f81c5fca096bbb19d8))
+* configure CMS for development by default ([5b2e3d4](https://github.com/Max-Yterb/Generator/commit/5b2e3d4f148653054d97e45c85fcce37b45c5f61))
+
+
+### Bug Fixes
+
+* correct CMS project configuration and CLI output ([b557447](https://github.com/Max-Yterb/Generator/commit/b557447dc0abf56ad8af269f89c75a344e09d166))
+* correct decap-server package name from @decaporg/decap-server to decap-server ([e517570](https://github.com/Max-Yterb/Generator/commit/e517570f225873a4c0f6a83baf6a23bf2e70a5ca))
+* correct git initialization directory handling for global deployment ([a8b7f91](https://github.com/Max-Yterb/Generator/commit/a8b7f913bed4122d95b03416439dfa09dfafac74))
+* correct YAML indentation in multilanguage CMS collections ([6e50f71](https://github.com/Max-Yterb/Generator/commit/6e50f71266ea7949c60309c84d35891c7bf74bc6))
+* remove pages collections and use dynamic resources for CMS tests ([ae226d2](https://github.com/Max-Yterb/Generator/commit/ae226d26c6a96cced16d881bedc180a4301abfbd))
+* resolve CMS configuration conflicts between step2 and step5 ([4a348b9](https://github.com/Max-Yterb/Generator/commit/4a348b9d89ae92661d03bac05c8a3af35fa7be87))
+* resolve CMS editorial workflow error for local development ([0fde2b6](https://github.com/Max-Yterb/Generator/commit/0fde2b6d1f8f64c6c1baac095b6a487799f30f14))
+
 ## [1.2.0](https://github.com/Max-Yterb/Generator/compare/v1.1.0...v1.2.0) (2025-09-08)
 
 
